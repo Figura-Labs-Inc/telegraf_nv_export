@@ -9,7 +9,7 @@ mkdir build
 cd build
 cmake ..
 make
-# cp ./build/nv_export /etc/telegraf/
+# sudo cp nv_export /etc/telegraf/
 ```
 
 ## Telegraf Configuration
