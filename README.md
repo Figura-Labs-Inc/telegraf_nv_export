@@ -13,6 +13,11 @@ make
 # sudo cp nv_export /etc/telegraf/
 ```
 
+Since telegraf doesn't run the executable as root, you need to set the capabilities of the executable to allow reading `/dev/mem`:
+```sh
+sudo setcap cap_sys_rawio,cap_dac_override+ep
+```
+
 ## Telegraf Configuration
 ```toml
 # ...
