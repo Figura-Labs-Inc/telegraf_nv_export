@@ -197,12 +197,15 @@ int main() {
 
             std::stringstream ss;
             std::stringstream errors;
-
-            ss << "nv_export";
+            bool first = true;
+            ss << "nv_export ";
             reflect::for_each([&](auto I) {
                 auto field = reflect::get<I>(gpu_info);
                 if (field.has_value()) {
-                    ss << "," << reflect::member_name<I>(gpu_info) << "=";
+                    if (!std::exchange(first, false)) {
+                        ss << ",";
+                    }
+                    ss << reflect::member_name<I>(gpu_info) << "=";
                     if constexpr (std::is_same_v<std::remove_cvref_t<decltype(*field)>, std::string>) {
                         ss << "\"" << *field << "\"";
                     } else if constexpr (std::is_same_v<std::remove_cvref_t<decltype(*field)>, bool>) {
