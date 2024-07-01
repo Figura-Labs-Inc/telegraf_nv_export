@@ -22,7 +22,7 @@ find_package(CUDAToolkit REQUIRED)
 
 add_executable(${PROJECT_NAME} nv_export.cpp)
 
-if (NO_DRAM_TELEMETRY)
+if (DRAM_TELEMETRY)
   message(STATUS "Building with DRAM telemetry")
   find_library(PCI_LIBRARY NAMES pci)
   find_path(PCI_INCLUDE_DIR NAMES pci/pci.h)
