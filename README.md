@@ -15,7 +15,7 @@ make
 
 Since telegraf doesn't run the executable as root, you need to set the capabilities of the executable to allow reading `/dev/mem`:
 ```sh
-sudo setcap cap_sys_rawio,cap_dac_override+ep
+sudo setcap cap_sys_rawio,cap_dac_override+ep ./nv_export
 ```
 
 ## Telegraf Configuration
@@ -29,6 +29,8 @@ sudo setcap cap_sys_rawio,cap_dac_override+ep
 ```
 
 # Notes on VRAM temperature readings
+
+The hack is needed because calling `nvmlDeviceGetFieldValues()` with `NVML_FI_DEV_MEMORY_TEMP` returns error `NVML_ERROR_NOT_SUPPORTED`.
 
 credits to [olealgoritme/gddr6](https://github.com/olealgoritme/gddr6)
 
