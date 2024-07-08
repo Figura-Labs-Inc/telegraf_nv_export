@@ -60,8 +60,9 @@ SecureBoot disabled
 
 ## Dependencies
 - libpci-dev
+- libfmt-dev
 ```
-sudo apt install libpci-dev -y
+sudo apt install libpci-dev libfmt-dev -y
 ```
 
 ## Supported GPUs

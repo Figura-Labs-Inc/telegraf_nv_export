@@ -33,10 +33,13 @@ else()
   target_compile_definitions(${PROJECT_NAME} PRIVATE NO_DRAM_TELEMETRY)
 endif()
 
+find_package(fmt CONFIG REQUIRED)
+
 target_link_libraries(${PROJECT_NAME} PRIVATE 
     CUDA::nvml
     reflect::reflect
     range-v3::range-v3
+    fmt
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
