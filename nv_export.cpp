@@ -4,7 +4,7 @@
 #include <thread>
 #include <unordered_map>
 #include <cstdlib>
-#include <format>
+#include <fmt/core.h>
 
 #include <stdlib.h>
 #include <errno.h>
@@ -334,7 +334,7 @@ int main() {
         if (device.mapped_addr == MAP_FAILED)
         {
             device.mapped_addr = NULL;
-            std::cerr << std::format("Memory mapping failed for pci={:x}:{:x}:{:x}\n", device.pci_info.bus, device.pci_info.device, device.pci_info.domain);
+            std::cerr << fmt::format("Memory mapping failed for pci={:x}:{:x}:{:x}\n", device.pci_info.bus, device.pci_info.device, device.pci_info.domain);
             std::cerr << "Did you enable iomem=relaxed? Are you root?\n";
             return 1;
         }
@@ -376,23 +376,23 @@ int main() {
                 if (field) {
                     using field_T = std::remove_cvref_t<decltype(*field)>;
                     std::string value;
-                    if      constexpr (std::is_same_v<field_T, std::string>) value = std::format("\"{}\"", escape_string(*field));
+                    if      constexpr (std::is_same_v<field_T, std::string>) value = fmt::format("\"{}\"", escape_string(*field));
                     else if constexpr (std::is_same_v<field_T, bool>)        value = (*field ? "true" : "false");
-                    else if constexpr (std::is_same_v<field_T, uint64_t>)    value = std::format("{}u", *field);
-                    else                                                     value = std::format("{}", *field);
+                    else if constexpr (std::is_same_v<field_T, uint64_t>)    value = fmt::format("{}u", *field);
+                    else                                                     value = fmt::format("{}", *field);
 
-                    metrics.push_back(std::format("{}={}", name, value));
+                    metrics.push_back(fmt::format("{}={}", name, value));
                 } else {
-                    errors.push_back(std::format("{} ({})", name, reflect::enum_name(field.error())));
+                    errors.push_back(fmt::format("{} ({})", name, reflect::enum_name(field.error())));
                 }
-            }, gpu);
+           }, gpu);
 
 #ifndef NO_DRAM_TELEMETRY
             if (device.mapped_addr != NULL && device.mapped_addr != MAP_FAILED) {
                 void *virt_addr = (uint8_t *)device.mapped_addr + (device.phys_addr  - device.base_offset);
                 uint32_t read_result = *((uint32_t *)virt_addr);
                 uint32_t temp = ((read_result & 0x00000fff) / 0x20);
-                metrics.push_back(std::format("temperature_memory={}", temp));
+                metrics.push_back(fmt::format("temperature_memory={}", temp));
             }
 #endif
 
@@ -400,7 +400,7 @@ int main() {
                 auto error_str = errors
                     | ranges::views::join(",")
                     | ranges::to<std::string>();
-                metrics.push_back(std::format("errors=\"{}\"", escape_string(error_str)));
+                metrics.push_back(fmt::format("errors=\"{}\"", escape_string(error_str)));
             }
 
             std::cout << "nv_export"
